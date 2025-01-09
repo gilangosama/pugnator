@@ -87,7 +87,7 @@
     <!-- Katalog Section -->
     <section id="katalog" class="bg-black text-white py-16">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Our Products</h2>
+            <h2 class="text-3xl font-bold text-center mb-12">Katalog</h2>
             
             <!-- Slider Container -->
             <div class="relative">
@@ -179,7 +179,7 @@
             <!-- View All Button -->
             <div class="text-center mt-8">
                 <a href="{{ route('products.index') }}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                    View All Products
+                    Lihat Semua Katalog
                 </a>
             </div>
         </div>
@@ -208,19 +208,31 @@
     </section>
 
     <!-- Event Section -->
-    <section id="event" class="bg-white py-16">
+    <section class="py-16">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Event</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @for ($i = 1; $i <= 3; $i++)
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                         <img src="placeholder.png" alt="Event Image" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2">Event Title {{ $i }}</h3>
-                            <p class="text-gray-600">Join us for an exciting event on topic {{ $i }}.</p>
+                            <p class="text-gray-600 mb-4">Join us for an exciting event on topic {{ $i }}.</p>
+                            <div class="flex justify-end">
+                                <a href="{{ route('events.index') }}" 
+                                   class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                    Lihat Detail
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @endfor
+            </div>
+            <div class="text-center mt-8">
+                <a href="{{ route('events.index') }}" 
+                   class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    Lihat Semua Event
+                </a>
             </div>
         </div>
     </section>

@@ -11,6 +11,7 @@ class EventController extends Controller
         $events = [
             'upcoming' => [
                 [
+                    'id' => 1,
                     'title' => 'Kejuaraan Karate Nasional',
                     'date' => '2024-03-15',
                     'location' => 'Jakarta Convention Center',
@@ -23,6 +24,7 @@ class EventController extends Controller
             ],
             'ongoing' => [
                 [
+                    'id' => 2,
                     'title' => 'Pelatihan Teknik Dasar Karate',
                     'date' => '2024-02-01',
                     'end_date' => '2024-02-28',
@@ -35,6 +37,7 @@ class EventController extends Controller
             ],
             'completed' => [
                 [
+                    'id' => 3,
                     'title' => 'Turnamen Regional 2023',
                     'date' => '2023-12-20',
                     'location' => 'Bandung Sport Center',
@@ -52,13 +55,54 @@ class EventController extends Controller
 
     public function show($id)
     {
-        // Logic untuk menampilkan detail event
-        return view('events.show');
+        $event = $this->getEventById($id);
+        
+        if (!$event) {
+            abort(404);
+        }
+        
+        return view('events.show', compact('event'));
     }
 
     public function register($id)
     {
-        // Logic untuk mendaftar event
-        return redirect()->back()->with('success', 'Berhasil mendaftar event!');
+        $event = $this->getEventById($id);
+        
+        if (!$event) {
+            abort(404);
+        }
+        
+        return view('events.register', [
+            'event' => $event,
+            'eventId' => $id
+        ]);
+    }
+
+    private function getEventById($id)
+    {
+        $events = [
+            'upcoming' => [
+                [
+                    'id' => 1,
+                    'title' => 'Kejuaraan Karate Nasional',
+                    'date' => '2024-03-15',
+                    'location' => 'Jakarta Convention Center',
+                    'image' => 'img/event1.jpg',
+                    'description' => 'Kompetisi karate tingkat nasional untuk semua kategori usia',
+                    'status' => 'upcoming',
+                    'registration_deadline' => '2024-03-01'
+                ]
+            ]
+        ];
+
+        foreach ($events as $status => $statusEvents) {
+            foreach ($statusEvents as $event) {
+                if ($event['id'] == $id) {
+                    return $event;
+                }
+            }
+        }
+
+        return null;
     }
 } 
