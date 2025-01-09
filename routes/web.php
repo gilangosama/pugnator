@@ -34,6 +34,9 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('products
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
-Route::post('/events/{id}/register', [EventController::class, 'register'])->name('events.register');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/events/{id}/register', [EventController::class, 'register'])->name('events.register');
+    Route::post('/events/{id}/register', [EventController::class, 'storeRegistration'])->name('events.store');
+});
 
 require __DIR__.'/auth.php';
