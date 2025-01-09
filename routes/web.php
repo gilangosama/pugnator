@@ -4,6 +4,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\EventManagementController;
+use App\Http\Controllers\Admin\CatalogManagementController;
+use App\Http\Controllers\CatalogController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,14 +33,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+    Route::post('/products/{id}/purchase', [ProductController::class, 'purchase'])->name('products.purchase');
+});
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 Route::middleware(['auth'])->group(function () {
     Route::get('/events/{id}/register', [EventController::class, 'register'])->name('events.register');
-    Route::post('/events/{id}/register', [EventController::class, 'storeRegistration'])->name('events.store');
+    Route::post('/events/{id}/register', [EventController::class, 'registerStore'])->name('events.register.store');
+    Route::get('/catalog/{id}', [CatalogController::class, 'show'])->name('catalog.show');
+    Route::post('/catalog/{id}/purchase', [CatalogController::class, 'purchase'])->name('catalog.purchase');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::resource('events', EventManagementController::class);
+    Route::resource('catalog', CatalogManagementController::class);
 });
 
 require __DIR__.'/auth.php';
