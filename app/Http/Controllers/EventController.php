@@ -72,10 +72,31 @@ class EventController extends Controller
             abort(404);
         }
         
-        return view('events.register', [
-            'event' => $event,
-            'eventId' => $id
+        return view('events.register', compact('event'));
+    }
+
+    public function registerStore(Request $request, $id)
+    {
+        $event = $this->getEventById($id);
+        
+        if (!$event) {
+            abort(404);
+        }
+
+        // Validasi input
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'gender' => 'required|in:L,P',
+            'email' => 'required|email',
+            'phone' => 'required|string',
+            'payment_method' => 'required|in:transfer,ewallet,cash'
         ]);
+
+        // Logika penyimpanan data pendaftaran
+        // ... 
+
+        return redirect()->route('events.show', $id)->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran.');
     }
 
     private function getEventById($id)

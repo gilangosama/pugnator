@@ -1,57 +1,84 @@
 <x-app-layout>
     <div class="min-h-screen bg-gray-100">
-        <!-- Header -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center">
-                <a href="{{ url('/products') }}" class="text-gray-600 hover:text-gray-900 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <!-- Header dengan tombol kembali -->
+        <div class="bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <a href="{{ route('products.index') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
-                    <span>Kembali ke Katalog</span>
+                    Kembali ke Katalog
                 </a>
             </div>
-        </header>
+        </div>
 
-        <!-- Product Detail -->
+        <!-- Konten Produk -->
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-xl overflow-hidden shadow-lg">
-                <div class="md:flex">
-                    <div class="md:w-1/2">
-                        <img src="{{ asset($product['image']) }}" alt="{{ $product['title'] }}" class="w-full h-[500px] object-cover">
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+                    <!-- Gambar Produk -->
+                    <div>
+                        <img src="{{ asset($product['image']) }}" alt="{{ $product['title'] }}" class="w-full rounded-lg">
                     </div>
-                    <div class="md:w-1/2 p-8">
-                        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ $product['title'] }}</h1>
-                        <p class="text-gray-600 mb-4">{{ $product['description'] }}</p>
-                        <p class="text-blue-600 font-bold text-2xl mb-6">{{ $product['price'] }}</p>
-                        <div class="prose max-w-none mb-6">
-                            <h3 class="text-lg font-semibold mb-2">Deskripsi Produk</h3>
-                            <p class="text-gray-600">{{ $product['details'] }}</p>
+
+                    <!-- Detail Produk -->
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $product['title'] }}</h1>
+                        <p class="text-lg text-gray-600 mb-6">{{ $product['description'] }}</p>
+                        
+                        <div class="text-3xl font-bold text-blue-600 mb-8">
+                            Rp {{ number_format($product['price'], 0, ',', '.') }}
                         </div>
-                        @if(isset($product['features']))
-                        <div class="mb-6">
-                            <h3 class="text-lg font-semibold mb-2">Fitur Utama</h3>
-                            <ul class="list-disc list-inside text-gray-600">
-                                @foreach($product['features'] as $feature)
-                                    <li>{{ $feature }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-                        @if(isset($product['sizes']))
-                        <div class="mb-6">
-                            <h3 class="text-lg font-semibold mb-2">Ukuran yang Tersedia</h3>
-                            <div class="flex gap-2">
-                                @foreach($product['sizes'] as $size)
-                                    <button class="px-4 py-2 border border-gray-300 rounded-md hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-bold mb-4">Deskripsi Produk</h3>
+                                <p class="text-gray-600">Baju karate dewasa dengan bahan premium yang tahan lama.</p>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-bold mb-4">Fitur Utama</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Bahan premium berkualitas tinggi</li>
+                                    <li>Desain modern dan stylish</li>
+                                    <li>Cocok untuk latihan intensif</li>
+                                    <li>Nyaman dipakai dalam waktu lama</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-bold mb-4">Ukuran yang Tersedia</h3>
+                                <div class="flex gap-4">
+                                    @foreach(['S', 'M', 'L', 'XL'] as $size)
+                                    <button class="w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-gray-700 hover:border-blue-500 focus:outline-none focus:border-blue-500">
                                         {{ $size }}
                                     </button>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
+
+                            <form action="{{ route('products.purchase', $product['id']) }}" method="POST" class="space-y-6">
+                                @csrf
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Ukuran</label>
+                                    <select name="size" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                        <option value="">Pilih Ukuran</option>
+                                        @foreach(['S', 'M', 'L', 'XL'] as $size)
+                                        <option value="{{ $size }}">{{ $size }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
+                                    <input type="number" name="quantity" min="1" value="1" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                </div>
+
+                                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+                                    Beli Sekarang
+                                </button>
+                            </form>
                         </div>
-                        @endif
-                        <button class="w-full mt-8 bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                            Tambah ke Keranjang
-                        </button>
                     </div>
                 </div>
             </div>
