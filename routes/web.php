@@ -46,6 +46,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/events/{id}/register', [EventController::class, 'registerStore'])->name('events.register.store');
     Route::get('/catalog/{id}', [CatalogController::class, 'show'])->name('catalog.show');
     Route::post('/catalog/{id}/purchase', [CatalogController::class, 'purchase'])->name('catalog.purchase');
+    Route::get('/events/{id}/review', [EventController::class, 'review'])->name('events.review');
+    Route::post('/events/{id}/review', [EventController::class, 'storeReview'])->name('events.review.store');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

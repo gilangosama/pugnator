@@ -27,7 +27,7 @@ class EventController extends Controller
 
     public function register($id)
     {
-        $event = $this->getEventById($id);
+        $event = Event::find($id);
         
         if (!$event) {
             abort(404);
@@ -38,13 +38,12 @@ class EventController extends Controller
 
     public function registerStore(Request $request, $id)
     {
-        $event = $this->getEventById($id);
+        $event = Event::find($id);
         
         if (!$event) {
             abort(404);
         }
 
-        // Validasi input
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -57,20 +56,39 @@ class EventController extends Controller
         // Logika penyimpanan data pendaftaran
         // ... 
 
-        return redirect()->route('events.show', $id)->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran.');
+        return redirect()->route('events.show', $id)
+            ->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran.');
     }
 
-    public function store(Request $request)
+    public function review($id)
     {
-        // Implementasi logika penyimpanan data 
-        $validate = $request->validate([
-            'event_name' => 'required', 
-            'no_whatsapp' => 'required', 
-            'description' => 'required',
-            'date' => 'required',
-            'status' => 'required'
+        $event = Event::find($id);
+        
+        if (!$event) {
+            abort(404);
+        }
+        
+        return view('events.review', compact('event'));
+    }
+
+    public function storeReview(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string',
+            'suggestion' => 'nullable|string'
         ]);
 
-        return redirect()->route('events.index');
-    }   
+        $event = Event::find($id);
+        
+        if (!$event) {
+            abort(404);
+        }
+
+        // Logic untuk menyimpan review
+        // ...
+
+        return redirect()->route('events.show', $id)
+            ->with('success', 'Terima kasih atas ulasan Anda!');
+    }
 } 
