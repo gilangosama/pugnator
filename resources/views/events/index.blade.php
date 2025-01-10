@@ -33,7 +33,7 @@
                                 <p class="text-gray-600 mb-4">{{ $open['description'] }}</p>
                                 
                                 <div class="flex justify-between items-center">
-                                    <span>Contact Person: {{ $open['no_whatsapp'] }}</span>
+                                    <p>Contact Person: {{ $open['no_whatsapp'] }}</p>
                                     <a href="{{ route('events.show', $open['id']) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                                         Detail
                                     </a>
@@ -56,8 +56,8 @@
                                     <p>{{ $close['location'] }}</p>
                                 </div>
                                 <p class="text-gray-600 mb-4">{{ $close['description'] }}</p>
-                                <div>
-                                    <span class="text-gray-600">Contact Person: {{ $close['no_whatsapp'] }}</span><a href="{{ route('events.show', $close['id']) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                <div class="flex justify-between items-center">
+                                    <p class="text-gray-600">Contact Person: {{ $close['no_whatsapp'] }}</p><a href="{{ route('events.show', $close['id']) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                                         Detail
                                     </a>
                                 </div>
