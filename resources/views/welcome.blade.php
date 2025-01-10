@@ -247,13 +247,18 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">What our alumni says</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @for ($i = 1; $i <= 3; $i++)
+                @forelse ($data['reviews'] as $review)
                     <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <img src="placeholder.png" alt="Alumni Image" class="w-24 h-24 rounded-full mx-auto mb-4">
-                        <h3 class="text-xl font-bold mb-2">Alumni {{ $i }}</h3>
-                        <p class="text-gray-600">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id fringilla augue."</p>
+                        <h3 class="text-xl font-bold mb-2">{{ $review->rating }}</h3>
+                        <p class="text-gray-600">"{{ $review->review }}"</p>
+                        <p class="text-gray-600 mt-2 italic font-semibold">- {{ $review->suggestion }}</p>
                     </div>
-                @endfor
+                @empty
+                    {{-- jika kosong --}}
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <p>Testimoni Kosong</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
