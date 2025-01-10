@@ -17,10 +17,13 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word(),
-            'price' => $this->faker->numberBetween(10000, 1000000),
-            'description' => $this->faker->paragraph(),
-            'category' => $this->faker->randomElement(['baju', 'celana', 'sepatu', 'topi']),
+            'title' => $this->faker->sentence(3),
+            'image' => $this->faker->imageUrl,
+            'description' => $this->faker->paragraph,
+            'category' => $this->faker->word,
+            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'stock' => $this->faker->numberBetween(1, 100),
+            'status' => $this->faker->randomElement(['Tersedia', 'Habis']),
         ];
     }
 }

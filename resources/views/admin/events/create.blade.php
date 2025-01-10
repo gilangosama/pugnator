@@ -24,33 +24,51 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Nama Event</label>
                                 <input type="text" name="event_name" value="{{ old('event_name', $event->event_name ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                @error('event_name')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
                                 <textarea name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>{{ old('description', $event->description ?? '') }}</textarea>
+                                @error('description')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Kontak Person</label>
                                 <input type="number" name="no_whatsapp" value="{{ old('no_whatsapp', $event->no_whatsapp ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                @error('no_whatsapp')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Tanggal Event</label>
                                     <input type="date" name="date" value="{{ old('date', $event->date ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                    @error('date')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Deadline Pendaftaran</label>
                                     <input type="date" name="deadline" value="{{ old('deadline', $event->deadline ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                    @error('deadline')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Lokasi</label>
                                 <input type="text" name="location" value="{{ old('location', $event->location ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                @error('location')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
@@ -59,6 +77,9 @@
                                 @if(isset($event) && $event->image)
                                     <img src="{{ asset('storage/' . $event->image) }}" alt="Event Image" class="mt-2 w-32 h-32 object-cover">
                                 @endif
+                                @error('image')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
@@ -68,6 +89,9 @@
                                     <option value="ongoing" {{ old('status', $event->status ?? '') == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
                                     <option value="completed" {{ old('status', $event->status ?? '') == 'completed' ? 'selected' : '' }}>Completed</option>
                                 </select>
+                                @error('status')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="pt-4">
@@ -82,3 +106,4 @@
         </div>
     </div>
 </x-app-layout>
+

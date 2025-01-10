@@ -10,10 +10,12 @@ class EventManagementController extends Controller
 {
     public function index()
     {
-        $eventOpens = Event::where('status', 'open')->get();
-        $eventClosed = Event::where('status', 'close')->get();
+        $events = [
+            'upcoming' => Event::where('status', 'upcoming')->get(),
+            'completed' => Event::where('status', 'completed')->get()
+        ];
         
-        return view('admin.events.index', compact('eventOpens', 'eventClosed'));
+        return view('admin.events.index', compact('events'));
     }
 
     public function create()
@@ -29,7 +31,7 @@ class EventManagementController extends Controller
             'description' => 'required|max:255',
             'date' => 'required|date',
             'deadline' => 'required|date',
-            'location' => 'required|string|max:50',
+            'location' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:upcoming,ongoing,completed'
         ]);
@@ -68,18 +70,25 @@ class EventManagementController extends Controller
             'description' => 'required|max:255',
             'date' => 'required|date',
             'deadline' => 'required|date',
-            'location' => 'required|string|max:50',
+            'location' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status' => 'required|in:upcoming,ongoing,completed'
+            'status' => 'required|in:upcoming,completed'
         ]);
 
         $event = Event::findOrFail($id);
 
         if ($request->hasFile('image')) {
+            // Cek apakah ada gambar lama
+            if ($event->image) {
+                // Hapus gambar lama dari storage
+                Storage::delete($event->image);
+            }
+        
+            // Simpan gambar baru
             $imagePath = $request->file('image')->store('events');
             $event->image = $imagePath;
         }
-
+        
         $event->update($validated);
 
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui');
@@ -88,6 +97,9 @@ class EventManagementController extends Controller
     public function destroy($id)
     {
         $event = Event::findOrFail($id);
+        if ($event->image) {
+            Storage::delete('public/' . $event->image);
+        }
         $event->delete();
 
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil dihapus');

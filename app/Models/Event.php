@@ -14,6 +14,9 @@ class Event extends Model
         'no_whatsapp',
         'description',
         'date',
+        'deadline',
+        'location',
+        'image',
         'status',
     ];
 

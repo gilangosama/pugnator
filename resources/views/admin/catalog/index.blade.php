@@ -33,28 +33,32 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($katalog as $produk)
+                            @foreach($products as $produk)
                             <tr>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
-                                        <img src="{{ asset($produk['image']) }}" alt="{{ $produk['title'] }}" class="h-10 w-10 rounded-full object-cover">
+                                        <img src="{{ asset("storage/$produk->image") }}" alt="{{ $produk['title'] }}" class="h-10 w-10 rounded-full object-cover">
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">{{ $produk['title'] }}</div>
                                             <div class="text-sm text-gray-500">{{ $produk['description'] }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">Seragam</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">Rp 250.000</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">50</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">{{ $produk['category'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Rp {{ $produk['price'] }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">{{ $produk['stock'] }}</td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Tersedia
+                                        {{ $produk['status'] }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium space-x-2">
-                                    <a href="#" class="text-blue-600 hover:text-blue-900">Edit</a>
-                                    <a href="#" class="text-red-600 hover:text-red-900">Hapus</a>
+                                    <a href="{{ route('admin.catalog.edit', $produk->id) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
+                                    <form action="{{ route('admin.catalog.destroy', $produk->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
