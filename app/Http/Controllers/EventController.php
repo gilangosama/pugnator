@@ -99,6 +99,25 @@ class EventController extends Controller
         return redirect()->route('events.show', $id)->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran.');
     }
 
+    public function review($id)
+    {
+        $event = [
+            'id' => $id,
+            'title' => 'Kejuaraan Karate Nasional',
+            'date' => '15 Maret 2024',
+            'location' => 'GOR Saparua Bandung',
+            'description' => 'Kejuaraan Karate tingkat nasional untuk semua kategori',
+        ];
+        
+        return view('events.review', compact('event'));
+    }
+
+    public function storeReview(Request $request, $id)
+    {
+        // Logic untuk menyimpan review
+        return redirect()->route('events.show', $id)->with('success', 'Terima kasih atas ulasan Anda!');
+    }
+
     private function getEventById($id)
     {
         $events = [
