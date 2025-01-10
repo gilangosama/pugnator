@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'event_name',
+        'no_whatsapp',
+        'description',
+        'date',
+        'status',
+    ];
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'id_event', 'id');
+    }
 }
