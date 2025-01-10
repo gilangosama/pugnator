@@ -109,7 +109,7 @@
                                     <div class="p-6">
                                         <h3 class="text-xl font-bold text-black mb-2">{{ $item->title }}</h3>
                                         <p class="text-gray-600 mb-4">{{ $item->description }}</p>
-                                        <a href="{{ route('products.show', 0) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
+                                        <a href="{{ route('products.show', $item->id) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
                                     </div>
                                 </div>
                             </div>
