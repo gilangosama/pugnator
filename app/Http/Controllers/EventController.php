@@ -16,7 +16,7 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = $this->getEventById($id);
+        $event = Event::find($id);
         
         if (!$event) {
             abort(404);

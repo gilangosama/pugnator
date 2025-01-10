@@ -19,6 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('no_whatsapp')->nullable(); // No WhatsApp
             $table->string('description', 255)->nullable(); // Deskripsi singkat
             $table->date('date')->nullable();             // Tanggal pelaksanaan
+            $table->date('deadline')->nullable();         // Tanggal penutupan pendaftaran
+            $table->string('location', 50)->nullable();  // Lokasi pelaksanaan
+            $table->string('image', 255)->nullable();    // Gambar event
             $table->string('status', 10)->nullable();     // Status pendaftaran
             $table->timestamps();             // Created_at dan Updated_at
         });

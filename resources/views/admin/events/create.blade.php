@@ -8,7 +8,7 @@
                     </svg>
                     <span>Kembali</span>
                 </a>
-                <h2 class="ml-4 text-2xl font-bold text-gray-800">Tambah Event Baru</h2>
+                <h2 class="ml-4 text-2xl font-bold text-gray-800">{{ isset($event) ? 'Edit Event' : 'Tambah Event Baru' }}</h2>
             </div>
         </header>
 
@@ -16,52 +16,63 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        <form action="{{ isset($event) ? route('admin.events.update', $event->id) : route('admin.events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                             @csrf
+                            @if(isset($event))
+                                @method('PUT')
+                            @endif
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Judul Event</label>
-                                <input type="text" name="title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                <label class="block text-sm font-medium text-gray-700">Nama Event</label>
+                                <input type="text" name="event_name" value="{{ old('event_name', $event->event_name ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                                <textarea name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required></textarea>
+                                <textarea name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>{{ old('description', $event->description ?? '') }}</textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Kontak Person</label>
+                                <input type="number" name="no_whatsapp" value="{{ old('no_whatsapp', $event->no_whatsapp ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Tanggal Event</label>
-                                    <input type="date" name="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                    <input type="date" name="date" value="{{ old('date', $event->date ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Deadline Pendaftaran</label>
-                                    <input type="date" name="registration_deadline" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                    <input type="date" name="deadline" value="{{ old('deadline', $event->deadline ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Lokasi</label>
-                                <input type="text" name="location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                <input type="text" name="location" value="{{ old('location', $event->location ?? '') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Gambar Event</label>
-                                <input type="file" name="image" class="mt-1 block w-full" required>
+                                <input type="file" name="image" class="mt-1 block w-full" {{ isset($event) ? '' : 'required' }}>
+                                @if(isset($event) && $event->image)
+                                    <img src="{{ asset('storage/' . $event->image) }}" alt="Event Image" class="mt-2 w-32 h-32 object-cover">
+                                @endif
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Status</label>
                                 <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                                    <option value="upcoming">Upcoming</option>
-                                    <option value="ongoing">Ongoing</option>
-                                    <option value="completed">Completed</option>
+                                    <option value="upcoming" {{ old('status', $event->status ?? '') == 'upcoming' ? 'selected' : '' }}>Upcoming</option>
+                                    <option value="ongoing" {{ old('status', $event->status ?? '') == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
+                                    <option value="completed" {{ old('status', $event->status ?? '') == 'completed' ? 'selected' : '' }}>Completed</option>
                                 </select>
                             </div>
 
                             <div class="pt-4">
                                 <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                    Buat Event
+                                    {{ isset($event) ? 'Update Event' : 'Buat Event' }}
                                 </button>
                             </div>
                         </form>
@@ -70,4 +81,4 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>

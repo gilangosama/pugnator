@@ -32,7 +32,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($events['upcoming'] as $event)
+                            @foreach($eventOpens as $event)
                             <tr>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
@@ -50,8 +50,12 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium space-x-2">
-                                    <a href="#" class="text-blue-600 hover:text-blue-900">Edit</a>
-                                    <a href="#" class="text-red-600 hover:text-red-900">Hapus</a>
+                                    <a href="{{ route('admin.events.edit', $event['id']) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
+                                    <form action="{{ route('admin.events.destroy', $event['id']) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
