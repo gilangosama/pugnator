@@ -17,8 +17,11 @@ class ReviewFactory extends Factory
     public function definition()
     {
         return [
-            'id_user' => \App\Models\User::factory(),
-            'ulasan' => $this->faker->text(),
+            'rating' => $this->faker->numberBetween(1, 5),
+            'review' => $this->faker->paragraph,
+            'suggestion' => $this->faker->sentence,
+            'event_id' => $this->faker->numberBetween(1, 10),
+            'user_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

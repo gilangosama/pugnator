@@ -15,14 +15,14 @@
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <!-- Tab Navigation -->
             <div class="flex space-x-4 mb-8">
-                <button class="px-6 py-2 bg-blue-600 text-white rounded-lg" onclick="showTab('open')">Open</button>
-                <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg" onclick="showTab('closed')">Closed</button>
+                <button class="px-6 py-2 bg-blue-600 text-white rounded-lg" onclick="showTab('upcoming')">Upcoming</button>
+                <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg" onclick="showTab('completed')">Completed</button>
             </div>
 
             <!-- Event Lists -->
-            <div id="open" class="event-tab">
+            <div id="upcoming" class="event-tab">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($eventOpens as $open)
+                    @foreach($events['upcoming'] as $open)
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                             <img src="{{ asset($open['image']) }}" alt="{{ $open['title'] }}" class="w-full h-48 object-cover">
                             <div class="p-6">
@@ -44,9 +44,9 @@
                 </div>
             </div>
 
-            <div id="closed" class="event-tab hidden">
+            <div id="completed" class="event-tab hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($eventClosed as $close)
+                    @foreach($events['completed'] as $close)
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                             <img src="{{ asset($close['image']) }}" alt="{{ $close['title'] }}" class="w-full h-48 object-cover">
                             <div class="p-6">

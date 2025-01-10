@@ -3,64 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Penjualan;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = [
-            [
-                'id' => 1,
-                'title' => 'Tipe Fighter Kids II',
-                'image' => 'img/catalog 1.png',
-                'description' => 'Quick Dry & Light Fabric',
-                'category' => 'Seragam',
-                'price' => 250000,
-                'stock' => 50,
-                'sizes' => ['S', 'M', 'L', 'XL'],
-                'details' => 'Baju karate anak dengan bahan berkualitas tinggi, ringan dan nyaman digunakan.',
-                'features' => [
-                    'Bahan ringan dan breathable',
-                    'Cocok untuk anak usia 6-12 tahun',
-                    'Tahan lama dan mudah dibersihkan',
-                    'Tersedia dalam berbagai ukuran'
-                ]
-            ],
-            [
-                'id' => 2,
-                'title' => 'Tipe Avanger 90',
-                'image' => 'img/Screenshot 2025-01-05 000542.png',
-                'description' => 'Avanger Fabric',
-                'category' => 'Seragam',
-                'price' => 300000,
-                'stock' => 30,
-                'sizes' => ['M', 'L', 'XL', 'XXL'],
-                'details' => 'Baju karate dewasa dengan bahan premium yang tahan lama.',
-                'features' => [
-                    'Bahan premium berkualitas tinggi',
-                    'Desain modern dan stylish',
-                    'Cocok untuk latihan intensif',
-                    'Nyaman dipakai dalam waktu lama'
-                ]
-            ],
-            [
-                'id' => 3,
-                'title' => 'Tipe Fighter Pro',
-                'image' => 'img/Screenshot 2025-01-05 000553.png',
-                'description' => 'Professional Grade Material',
-                'category' => 'Seragam',
-                'price' => 350000,
-                'stock' => 25,
-                'sizes' => ['S', 'M', 'L', 'XL'],
-                'details' => 'Baju karate profesional untuk atlet dengan standar kompetisi.',
-                'features' => [
-                    'Bahan khusus untuk kompetisi',
-                    'Standar WKF approved',
-                    'Durabilitas tinggi',
-                    'Desain ergonomis'
-                ]
-            ]
-        ];
+        $products = Product::all();
         
         return view('products.index', compact('products'));
     }
@@ -84,21 +34,29 @@ class ProductController extends Controller
 
     public function purchase(Request $request, $id)
     {
+        $product = Product::findOrFail($id);
         $validated = $request->validate([
             'size' => 'required|in:S,M,L,XL,XXL',
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $product = $this->getProductById($id);
-        
-        if (!$product) {
-            abort(404);
+        if ($product->stock < $validated['quantity']) {
+            return redirect()->back()->with('error', 'Stok tidak mencukupi');
         }
 
-        // Logika pembelian
-        // ...
+        $product->stock -= $validated['quantity'];
+        $product->save();
 
-        return redirect()->route('products.show', $id)
-            ->with('success', 'Pembelian berhasil! Silakan lakukan pembayaran.');
+
+
+        Penjualan::create([
+            'product_id' => $product->id,
+            'user_id' => auth()->id(),
+            'size' => $validated['size'],
+            'quantity' => $validated['quantity']
+        ]);
+
+        return redirect()->back()->with('success', 'Pembelian berhasil! Silakan lakukan pembayaran');
+        return view('admin.catalog.purchases', compact('product'));
     }
 } 

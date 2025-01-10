@@ -109,4 +109,6 @@ class CatalogManagementController extends Controller
 
         return redirect()->route('admin.catalog.index')->with('success', 'Produk berhasil dihapus');
     }
+
+
 }

@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Booking;
+use App\Models\Review;
 
 class EventController extends Controller
 {
     public function index()
     {
-        $eventOpens = Event::where('status', 'open')->get();
-        $eventClosed = Event::where('status', 'close')->get();
-        return view('events.index', compact('eventOpens', 'eventClosed'));
+        $events = [
+            'upcoming' => Event::where('status', 'upcoming')->get(),
+            'completed' => Event::where('status', 'completed')->get()
+        ];
+        
+        return view('events.index', compact('events'));
     }
 
     public function show($id)
@@ -53,8 +58,16 @@ class EventController extends Controller
             'payment_method' => 'required|in:transfer,ewallet,cash'
         ]);
 
-        // Logika penyimpanan data pendaftaran
-        // ... 
+        Booking::create([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'gender' => $validated['gender'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'payment_method' => $validated['payment_method'],
+            'event_id' => $event->id,
+            'user_id' => auth()->id()
+        ]);
 
         return redirect()->route('events.show', $id)
             ->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran.');
@@ -80,13 +93,20 @@ class EventController extends Controller
         ]);
 
         $event = Event::find($id);
+
         
         if (!$event) {
             abort(404);
         }
 
         // Logic untuk menyimpan review
-        // ...
+        Review::create([
+            'rating' => $validated['rating'],
+            'review' => $validated['review'],
+            'suggestion' => $validated['suggestion'],
+            'event_id' => $event->id,
+            'user_id' => auth()->id()
+        ]);
 
         return redirect()->route('events.show', $id)
             ->with('success', 'Terima kasih atas ulasan Anda!');

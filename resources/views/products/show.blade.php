@@ -27,35 +27,10 @@
                         <p class="text-lg text-gray-600 mb-6">{{ $product['description'] }}</p>
                         
                         <div class="text-3xl font-bold text-blue-600 mb-8">
-                            Rp {{ number_format($product['price'], 0, ',', '.') }}
+                            Rp {{ $product['price'] }}
                         </div>
 
                         <div class="space-y-6">
-                            <div>
-                                <h3 class="text-xl font-bold mb-4">Deskripsi Produk</h3>
-                                <p class="text-gray-600">Baju karate dewasa dengan bahan premium yang tahan lama.</p>
-                            </div>
-
-                            <div>
-                                <h3 class="text-xl font-bold mb-4">Fitur Utama</h3>
-                                <ul class="list-disc list-inside space-y-2 text-gray-600">
-                                    <li>Bahan premium berkualitas tinggi</li>
-                                    <li>Desain modern dan stylish</li>
-                                    <li>Cocok untuk latihan intensif</li>
-                                    <li>Nyaman dipakai dalam waktu lama</li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <h3 class="text-xl font-bold mb-4">Ukuran yang Tersedia</h3>
-                                <div class="flex gap-4">
-                                    @foreach(['S', 'M', 'L', 'XL'] as $size)
-                                    <button class="w-12 h-12 border-2 border-gray-300 rounded-lg flex items-center justify-center text-gray-700 hover:border-blue-500 focus:outline-none focus:border-blue-500">
-                                        {{ $size }}
-                                    </button>
-                                    @endforeach
-                                </div>
-                            </div>
 
                             <form action="{{ route('products.purchase', $product['id']) }}" method="POST" class="space-y-6">
                                 @csrf
