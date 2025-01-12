@@ -127,16 +127,30 @@
         </div>
     </section>
 
+    
     <!-- About Us Section -->
-    <section id="about-us" class="bg-white py-16">
+    <section class="py-10 bg-white" id="about">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">About Us</h2>
-            <img src="img/Screenshot 2025-01-05 001553.png" alt="" class="w-full max-w-6xl mx-auto rounded-lg shadow-lg mb-8">
-            <div class="max-w-4xl mx-auto text-center">
-                <h3 class="text-2xl font-semibold mb-4">Welcome to Pugnator</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Pugnator is a brand that represents strength, resilience, and the spirit of martial arts. Our mission is to empower individuals through the practice of Taekwondo and other martial arts disciplines.
-                </p>
+            <div class="text-center">
+                <h2 class="text-4xl font-bold mb-4">About Us</h2>
+                <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                
+                <div class="p-8">
+                    <p class="text-gray-700 leading-relaxed mb-6 text-center">
+                        PUGNATOR, brand sport martial arts yang diciptakan untuk konsumen yang ingin memiliki kualitas internasional dengan harga nasional. Pugnator mewakili fighter untuk menumbuhkan percaya diri saat pertandingan dan latihan. Kualitas yang diunggulkan akan membuat kenyamanan dan mampu bersaing dengan brand internasional lainnya.
+                    </p>
+                    
+                    <p class="text-gray-700 leading-relaxed mb-6 text-center">
+                        "Your Mind is Your Power" - Tagline Pugnator harus mampu menciptakan pikiran percaya diri yang membuat menghantarkan fighter kepada kemenangan dan be the champ is a must. Pugnator percaya bahwa kekuatan utama yang sebenarnya bukan hanya fisik melainkan pikiran, dengan pikiran yang kuat akan melahirkan jiwa fighter yang Tangguh.
+                    </p>
+                    
+                    <p class="text-gray-700 leading-relaxed text-center">
+                        Pugnator memiliki visi sebagai brand martial arts yang dapat menjadi bagian perkembangan atlet-atlet di Indonesia.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -144,40 +158,59 @@
     <!-- Quote Section -->
     <section id="quote" class="bg-gray-100 py-12">
         <div class="container mx-auto px-4 text-center">
-            <p class="text-xl italic text-gray-700 mb-4">"Kebahagiaan adalah kesadaran pikiran tidak ada yang perlu dikhawatirkan."</p>
-            <p class="font-semibold text-gray-900">- Author Name</p>
+            <p class="text-xl italic text-gray-700 mb-4">"Kekalahan adalah keadaan pikiran; tidak ada yang pernah dikalahkan sampai kekalahan diterima sebagai kenyataan."</p>
+            <p class="font-semibold text-gray-900">- Bruce Lee - Actor, martial arts activist</p>
         </div>
     </section>
 
-    <!-- Event Section -->
-    <section class="py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Event</h2>
+    <!-- Section Event -->
+    <section class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">Event</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @for ($i = 1; $i <= 3; $i++)
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                        <img src="placeholder.png" alt="Event Image" class="w-full h-48 object-cover">
+                @forelse($upcomingEvents as $event)
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div class="relative h-64">
+                            @if($event->image)
+                                <img src="{{ asset('storage/' . $event->image) }}" 
+                                     alt="{{ $event->event_name }}"
+                                     class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-400">Tidak ada gambar</span>
+                                </div>
+                            @endif
+                        </div>
                         <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2">Event Title {{ $i }}</h3>
-                            <p class="text-gray-600 mb-4">Join us for an exciting event on topic {{ $i }}.</p>
-                            <div class="flex justify-end">
-                                <a href="{{ route('events.index') }}" 
-                                   class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <h3 class="text-xl font-bold text-gray-900">{{ $event->event_name }}</h3>
+                            <p class="text-gray-600 mt-2">{{ $event->description }}</p>
+                            <div class="mt-4 flex justify-between items-center">
+                                <p class="text-gray-600">{{ $event->date }}</p>
+                                <a href="{{ route('events.show', $event->id) }}" 
+                                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                                     Lihat Detail
                                 </a>
                             </div>
                         </div>
                     </div>
-                @endfor
+                @empty
+                    <div class="col-span-3 text-center text-gray-500">
+                        Belum ada event yang akan datang
+                    </div>
+                @endforelse
             </div>
-            <div class="text-center mt-8">
+
+            <div class="text-center mt-12">
                 <a href="{{ route('events.index') }}" 
-                   class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                   class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700">
                     Lihat Semua Event
                 </a>
             </div>
         </div>
     </section>
+
+    
 
     <!-- Our Footprint Section -->
     <section class="bg-gray-50 py-16">
@@ -209,24 +242,41 @@
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl font-bold mb-6">Menjadi Athlete yang lebih baik</h2>
             <p class="mb-8 max-w-2xl mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porttitor magna at malesuada ultricies. Suspendisse potenti.</p>
-            <button class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+            <!-- <button class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
                 Learn More
-            </button>
+            </button> -->
         </div>
     </section>
 
-    <!-- Testimonials Section -->
+    <!-- What Our Alumni Says Section -->
     <section class="bg-white py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">What our alumni says</h2>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">What Our Alumni Says</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @for ($i = 1; $i <= 3; $i++)
+                @forelse($alumni as $alumnus)
                     <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <img src="placeholder.png" alt="Alumni Image" class="w-24 h-24 rounded-full mx-auto mb-4">
-                        <h3 class="text-xl font-bold mb-2">Alumni {{ $i }}</h3>
-                        <p class="text-gray-600">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id fringilla augue."</p>
+                        <div class="relative w-32 h-32 mx-auto mb-6">
+                            @if($alumnus->image)
+                                <img src="{{ asset('storage/' . $alumnus->image) }}" 
+                                     alt="{{ $alumnus->name }}"
+                                     class="rounded-full w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            @endif
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $alumnus->name }}</h3>
+                        <p class="text-gray-600 italic">
+                            "{{ $alumnus->testimonial }}"
+                        </p>
                     </div>
-                @endfor
+                @empty
+                    <div class="col-span-3 text-center text-gray-500">
+                        Belum ada testimonial alumni
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -236,16 +286,26 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Our Documentation</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @for ($i = 1; $i <= 3; $i++)
+                @forelse($documentations as $doc)
                     <div class="overflow-hidden rounded-lg shadow-lg">
-                        <img src="placeholder.png" alt="Documentation Image" class="w-full h-64 object-cover">
+                        <img src="{{ asset('storage/' . $doc->image) }}" 
+                             alt="Documentation Image" 
+                             class="w-full h-64 object-cover">
                     </div>
-                @endfor
+                @empty
+                    @for ($i = 1; $i <= 3; $i++)
+                        <div class="overflow-hidden rounded-lg shadow-lg">
+                            <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                                <span class="text-gray-400">No Image</span>
+                            </div>
+                        </div>
+                    @endfor
+                @endforelse
             </div>
             <div class="text-center mt-8">
-                <button class="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                <!-- <button class="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
                     View More
-                </button>
+                </button> -->
             </div>
         </div>
     </section>

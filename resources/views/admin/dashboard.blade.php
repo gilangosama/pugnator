@@ -40,6 +40,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Alumni Management Card -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4">Manajemen Alumni</h3>
+                            <div class="space-y-4">
+                                <a href="{{ route('admin.alumni.index') }}" class="block bg-blue-600 text-white px-4 py-2 rounded-lg text-center hover:bg-blue-700">
+                                    Kelola Testimonial Alumni
+                                </a>
+                                <a href="{{ route('admin.alumni.create') }}" class="block bg-green-600 text-white px-4 py-2 rounded-lg text-center hover:bg-green-700">
+                                    Tambah Testimonial Baru
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documentation Management Card -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4">Manajemen Dokumentasi</h3>
+                            <div class="space-y-4">
+                                <a href="{{ route('admin.documentation.index') }}" class="block bg-blue-600 text-white px-4 py-2 rounded-lg text-center hover:bg-blue-700">
+                                    Kelola Dokumentasi
+                                </a>
+                                <a href="{{ route('admin.documentation.create') }}" class="block bg-green-600 text-white px-4 py-2 rounded-lg text-center hover:bg-green-700">
+                                    Tambah Dokumentasi Baru
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

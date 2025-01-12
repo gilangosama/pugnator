@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventManagementController;
 use App\Http\Controllers\Admin\CatalogManagementController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\Admin\AlumniController;
+use App\Http\Controllers\Admin\DocumentationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +57,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('events', EventManagementController::class);
     Route::resource('catalog', CatalogManagementController::class);
+    Route::resource('alumni', AlumniController::class);
+    Route::resource('documentation', DocumentationController::class);
 });
 
 Route::patch('/admin/events/{id}/status', [EventManagementController::class, 'updateStatus'])
