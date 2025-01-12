@@ -43,12 +43,6 @@ class EventController extends Controller
 
     public function registerStore(Request $request, $id)
     {
-        $event = Event::find($id);
-        
-        if (!$event) {
-            abort(404);
-        }
-
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -58,7 +52,14 @@ class EventController extends Controller
             'payment_method' => 'required|in:transfer,ewallet,cash'
         ]);
 
-        Booking::create([
+        $event = Event::find($id);
+        
+        if (!$event) {
+            abort(404);
+        }
+
+        // Simpan data pendaftaran ke database
+        $booking = Booking::create([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'gender' => $validated['gender'],
@@ -66,11 +67,15 @@ class EventController extends Controller
             'phone' => $validated['phone'],
             'payment_method' => $validated['payment_method'],
             'event_id' => $event->id,
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'status' => 'paid' // Karena langsung dianggap sudah bayar
         ]);
 
-        return redirect()->route('events.show', $id)
-            ->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran.');
+        // Redirect ke halaman sukses dengan data booking
+        return view('events.registration-success', [
+            'event' => $event,
+            'booking' => $booking
+        ]);
     }
 
     public function review($id)

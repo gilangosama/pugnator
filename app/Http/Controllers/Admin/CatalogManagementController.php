@@ -5,12 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 
 class CatalogManagementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $category = $request->query('category');
+        
+        $query = Product::query();
+        
+        if ($category && $category !== 'Semua') {
+            $query->where('category', $category);
+        }
+        
+        $products = $query->get();
+        
         return view('admin.catalog.index', compact('products'));
     }
 
@@ -101,13 +111,26 @@ class CatalogManagementController extends Controller
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        if ($product->image) {
-            Storage::delete('public/' . $product->image);
+        try {
+            $product = Product::findOrFail($id);
+            
+            // Hapus gambar dari storage jika ada
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            
+            // Hapus data produk
+            $product->delete();
+            
+            return redirect()
+                ->route('admin.catalog.index')
+                ->with('success', 'Produk berhasil dihapus');
+                
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.catalog.index')
+                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
-        $product->delete();
-
-        return redirect()->route('admin.catalog.index')->with('success', 'Produk berhasil dihapus');
     }
 
 

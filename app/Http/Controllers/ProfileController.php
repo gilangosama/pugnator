@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Booking;
 
 class ProfileController extends Controller
 {
@@ -16,8 +17,14 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $bookings = Booking::where('user_id', auth()->id())
+                          ->with('event')
+                          ->orderBy('created_at', 'desc')
+                          ->get();
+
         return view('profile.edit', [
             'user' => $request->user(),
+            'bookings' => $bookings
         ]);
     }
 

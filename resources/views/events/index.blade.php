@@ -24,17 +24,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($events['upcoming'] as $open)
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                            <img src="{{ asset($open['image']) }}" alt="{{ $open['title'] }}" class="w-full h-48 object-cover">
+                            <img src="{{ $open->image ? asset('storage/'.$open->image) : asset('images/default-event.jpg') }}" alt="{{ $open->event_name }}" class="w-full h-48 object-cover">
                             <div class="p-6">
-                                <h3 class="text-xl font-bold mb-2">{{ $open['event_name'] }}</h3>
+                                <h3 class="text-xl font-bold mb-2">{{ $open->event_name }}</h3>
                                 <div class="text-gray-600 mb-4">
-                                    <p class="mb-1">{{ $open['date'] }}</p>
+                                    <p class="mb-1">{{ $open->date }}</p>
                                 </div>
-                                <p class="text-gray-600 mb-4">{{ $open['description'] }}</p>
+                                <p class="text-gray-600 mb-4">{{ $open->description }}</p>
                                 
                                 <div class="flex justify-between items-center">
-                                    <p>Contact Person: {{ $open['no_whatsapp'] }}</p>
-                                    <a href="{{ route('events.show', $open['id']) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                    <p>Contact Person: {{ $open->no_whatsapp }}</p>
+                                    <a href="{{ route('events.show', $open->id) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                                         Detail
                                     </a>
                                 </div>
@@ -48,16 +48,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($events['completed'] as $close)
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                            <img src="{{ asset($close['image']) }}" alt="{{ $close['title'] }}" class="w-full h-48 object-cover">
+                            <img src="{{ $close->image ? asset('storage/'.$close->image) : asset('images/default-event.jpg') }}" alt="{{ $close->event_name }}" class="w-full h-48 object-cover">
                             <div class="p-6">
-                                <h3 class="text-xl font-bold mb-2">{{ $close['event_name'] }}</h3>
+                                <h3 class="text-xl font-bold mb-2">{{ $close->event_name }}</h3>
                                 <div class="text-gray-600 mb-4">
-                                    <p class="mb-1">{{ $close['date'] }} - {{ $close['end_date'] }}</p>
-                                    <p>{{ $close['location'] }}</p>
+                                    <p class="mb-1">{{ $close->date }} - {{ $close->end_date }}</p>
+                                    <p>{{ $close->location }}</p>
                                 </div>
-                                <p class="text-gray-600 mb-4">{{ $close['description'] }}</p>
+                                <p class="text-gray-600 mb-4">{{ $close->description }}</p>
                                 <div class="flex justify-between items-center">
-                                    <p class="text-gray-600">Contact Person: {{ $close['no_whatsapp'] }}</p><a href="{{ route('events.show', $close['id']) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                    <p class="text-gray-600">Contact Person: {{ $close->no_whatsapp }}</p><a href="{{ route('events.show', $close->id) }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                                         Detail
                                     </a>
                                 </div>

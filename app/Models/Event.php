@@ -17,11 +17,21 @@ class Event extends Model
         'deadline',
         'location',
         'image',
-        'status',
+        'status'
+    ];
+
+    // Definisikan konstanta untuk status
+    const STATUS_UPCOMING = 'upcoming';
+    const STATUS_COMPLETED = 'completed';
+
+    // Daftar status yang valid
+    public static $statuses = [
+        self::STATUS_UPCOMING => 'Upcoming',
+        self::STATUS_COMPLETED => 'Completed'
     ];
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class, 'id_event', 'id');
+        return $this->hasMany(Booking::class, 'event_id');
     }
 }

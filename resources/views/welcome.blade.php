@@ -10,7 +10,8 @@
     <!-- Header -->
     <header class="bg-gray-800 text-white">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Pugnator</h1>
+            
+            <h1 class="text-2xl font-bold flex items-center"><img src="img/logo putih.png" alt="logo" class="w-10 h-10 mr-2">Pugnator</h1>
             
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-6">
@@ -102,26 +103,62 @@
                 <div class="overflow-hidden" id="sliderContainer">
                     <div class="flex transition-transform duration-500 ease-in-out" id="slider">
                         <!-- Slide 1 -->
-                        @forelse ($data['products'] as $item)
-                            <div class="min-w-full md:min-w-[33.333%] p-4">
-                                <div class="bg-white rounded-xl overflow-hidden">
-                                    <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
-                                    <div class="p-6">
-                                        <h3 class="text-xl font-bold text-black mb-2">{{ $item->title }}</h3>
-                                        <p class="text-gray-600 mb-4">{{ $item->description }}</p>
-                                        <a href="{{ route('products.show', $item->id) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
-                                    </div>
+                        <div class="min-w-full md:min-w-[33.333%] p-4">
+                            <div class="bg-white rounded-xl overflow-hidden">
+                                <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Kids II</h3>
+                                    <p class="text-gray-600 mb-4">Quick Dry & Light Fabric</p>
+                                    <a href="{{ route('products.show', 0) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
                                 </div>
                             </div>
-                        @empty
-                            {{-- jika kosong --}}
-                            <div class="min-w-full md:min-w-[33.333%] p-4">
-                                <div class="bg-white rounded-xl overflow-hidden">
-                                    <p>Katalog Kosong</p>
-                                </div>
-                            </div>
-                        @endforelse
+                        </div>
 
+                        <div class="min-w-full md:min-w-[33.333%] p-4">
+                            <div class="bg-white rounded-xl overflow-hidden">
+                                <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Kids II</h3>
+                                    <p class="text-gray-600 mb-4">Quick Dry & Light Fabric</p>
+                                    <a href="{{ route('products.show', 1) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="min-w-full md:min-w-[33.333%] p-4">
+                            <div class="bg-white rounded-xl overflow-hidden">
+                                <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Kids II</h3>
+                                    <p class="text-gray-600 mb-4">Quick Dry & Light Fabric</p>
+                                    <a href="{{ route('products.show', 2) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 2 -->
+                        <div class="min-w-full md:min-w-[33.333%] p-4">
+                            <div class="bg-white rounded-xl overflow-hidden">
+                                <img src="img/Screenshot 2025-01-05 000542.png" alt="Product 2" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Avanger 90</h3>
+                                    <p class="text-gray-600 mb-4">Avanger Fabric</p>
+                                    <a href="{{ route('products.show', 3) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="min-w-full md:min-w-[33.333%] p-4">
+                            <div class="bg-white rounded-xl overflow-hidden">
+                                <img src="img/Screenshot 2025-01-05 000553.png" alt="Product 3" class="w-full h-64 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Pro</h3>
+                                    <p class="text-gray-600 mb-4">Professional Grade Material</p>
+                                    <a href="{{ route('products.show', 4) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -176,26 +213,21 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Event</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @forelse ($data['completed'] as $item)
+                @for ($i = 1; $i <= 3; $i++)
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                         <img src="placeholder.png" alt="Event Image" class="w-full h-48 object-cover">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2">{{ $item->event_name }}</h3>
-                            <p class="text-gray-600 mb-4">{{ $item->description }}.</p>
+                            <h3 class="text-xl font-bold mb-2">Event Title {{ $i }}</h3>
+                            <p class="text-gray-600 mb-4">Join us for an exciting event on topic {{ $i }}.</p>
                             <div class="flex justify-end">
                                 <a href="{{ route('events.index') }}" 
-                                class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                   class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                                     Lihat Detail
                                 </a>
                             </div>
                         </div>
                     </div>
-                @empty
-                    {{-- jika kosong --}}
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                        <p>Event Kosong</p>
-                    </div>
-                @endforelse
+                @endfor
             </div>
             <div class="text-center mt-8">
                 <a href="{{ route('events.index') }}" 
@@ -247,18 +279,13 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">What our alumni says</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @forelse ($data['reviews'] as $review)
+                @for ($i = 1; $i <= 3; $i++)
                     <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <h3 class="text-xl font-bold mb-2">{{ $review->rating }}</h3>
-                        <p class="text-gray-600">"{{ $review->review }}"</p>
-                        <p class="text-gray-600 mt-2 italic font-semibold">- {{ $review->suggestion }}</p>
+                        <img src="placeholder.png" alt="Alumni Image" class="w-24 h-24 rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-bold mb-2">Alumni {{ $i }}</h3>
+                        <p class="text-gray-600">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id fringilla augue."</p>
                     </div>
-                @empty
-                    {{-- jika kosong --}}
-                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-                        <p>Testimoni Kosong</p>
-                    </div>
-                @endforelse
+                @endfor
             </div>
         </div>
     </section>

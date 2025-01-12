@@ -1,7 +1,11 @@
 <x-app-layout>
     <div class="min-h-screen bg-gray-100">
+        <!-- tambahkan tombol Back -->
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <a href="{{ route('admin.dashboard') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Kembali ke Dashboard
+        </a>
                 <h2 class="text-2xl font-bold text-gray-800">Manajemen Katalog</h2>
                 <a href="{{ route('admin.catalog.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                     + Tambah Produk
@@ -9,14 +13,38 @@
             </div>
         </header>
 
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <!-- Filter Kategori -->
                 <div class="mb-6 flex space-x-4">
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg">Semua</button>
-                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg">Seragam</button>
-                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg">Aksesoris</button>
-                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg">Perlengkapan</button>
+                    <a href="{{ route('admin.catalog.index') }}" 
+                       class="px-4 py-2 rounded-lg {{ !request('category') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        Semua
+                    </a>
+                    <a href="{{ route('admin.catalog.index', ['category' => 'Seragam']) }}" 
+                       class="px-4 py-2 rounded-lg {{ request('category') === 'Seragam' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        Seragam
+                    </a>
+                    <a href="{{ route('admin.catalog.index', ['category' => 'Aksesoris']) }}" 
+                       class="px-4 py-2 rounded-lg {{ request('category') === 'Aksesoris' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        Aksesoris
+                    </a>
+                    <a href="{{ route('admin.catalog.index', ['category' => 'Perlengkapan']) }}" 
+                       class="px-4 py-2 rounded-lg {{ request('category') === 'Perlengkapan' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                        Perlengkapan
+                    </a>
                 </div>
 
                 <!-- Tabel Katalog -->

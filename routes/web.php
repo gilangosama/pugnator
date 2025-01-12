@@ -56,4 +56,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('catalog', CatalogManagementController::class);
 });
 
+Route::patch('/admin/events/{id}/status', [EventManagementController::class, 'updateStatus'])
+    ->name('admin.events.updateStatus');
+
 require __DIR__.'/auth.php';

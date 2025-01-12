@@ -5,29 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Booking extends Model
+class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'gender',
-        'email',
-        'phone',
-        'payment_method',
-        'event_id',
         'user_id',
+        'product_id',
+        'size',
+        'quantity',
+        'total_price',
         'status'
     ];
 
-    // Tambahkan relasi ke Event
-    public function event()
+    public function product()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Product::class);
     }
 
-    // Tambahkan relasi ke User
     public function user()
     {
         return $this->belongsTo(User::class);

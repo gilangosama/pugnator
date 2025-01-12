@@ -5,17 +5,25 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Illuminate\Support\Facades\Storage;
 
 class EventManagementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $events = [
-            'upcoming' => Event::where('status', 'upcoming')->get(),
-            'completed' => Event::where('status', 'completed')->get()
-        ];
+        $status = $request->get('status');
+        $query = Event::query();
         
-        return view('admin.events.index', compact('events'));
+        if ($status && array_key_exists($status, Event::$statuses)) {
+            $query->where('status', $status);
+        }
+        
+        $events = $query->orderBy('created_at', 'desc')->get();
+        
+        return view('admin.events.index', [
+            'events' => $events,
+            'currentStatus' => $status
+        ]);
     }
 
     public function create()
@@ -32,15 +40,16 @@ class EventManagementController extends Controller
             'date' => 'required|date',
             'deadline' => 'required|date',
             'location' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status' => 'required|in:upcoming,ongoing,completed'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => 'required|in:upcoming,completed'
         ]);
 
+        $imagePath = null;
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-
+            // Simpan ke folder public/storage/events
             $imagePath = $request->file('image')->store('events', 'public');
         }
+
         Event::create([
             'event_name' => $validated['event_name'],
             'no_whatsapp' => $validated['no_whatsapp'],
@@ -96,12 +105,37 @@ class EventManagementController extends Controller
 
     public function destroy($id)
     {
-        $event = Event::findOrFail($id);
-        if ($event->image) {
-            Storage::delete('public/' . $event->image);
+        try {
+            $event = Event::findOrFail($id);
+            
+            // Hapus gambar event jika ada
+            if ($event->image) {
+                Storage::disk('public')->delete($event->image);
+            }
+            
+            // Hapus event
+            $event->delete();
+            
+            return redirect()
+                ->route('admin.events.index')
+                ->with('success', 'Event berhasil dihapus');
+                
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.events.index')
+                ->with('error', 'Gagal menghapus event: ' . $e->getMessage());
         }
-        $event->delete();
+    }
 
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil dihapus');
+    public function updateStatus($id, Request $request)
+    {
+        $request->validate([
+            'status' => 'required|in:' . implode(',', array_keys(Event::$statuses))
+        ]);
+
+        $event = Event::findOrFail($id);
+        $event->update(['status' => $request->status]);
+        
+        return back()->with('success', 'Status event berhasil diperbarui');
     }
 }

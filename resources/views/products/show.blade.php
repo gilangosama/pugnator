@@ -18,7 +18,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
                     <!-- Gambar Produk -->
                     <div>
-                        <img src="{{ asset($product['image']) }}" alt="{{ $product['title'] }}" class="w-full rounded-lg">
+                        @if($product->image)
+                            <img src="{{ asset('storage/' . $product->image) }}" 
+                                 alt="{{ $product->title }}" 
+                                 class="w-full rounded-lg">
+                        @else
+                            <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">
+                                <span class="text-gray-400">Tidak ada gambar</span>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Detail Produk -->
@@ -32,26 +40,28 @@
 
                         <div class="space-y-6">
 
-                            <form action="{{ route('products.purchase', $product['id']) }}" method="POST" class="space-y-6">
+                            <form action="{{ route('products.purchase', $product->id) }}" method="POST">
                                 @csrf
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Ukuran</label>
-                                    <select name="size" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                                        <option value="">Pilih Ukuran</option>
-                                        @foreach(['S', 'M', 'L', 'XL'] as $size)
-                                        <option value="{{ $size }}">{{ $size }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Pilih Ukuran</label>
+                                        <select name="size" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Jumlah</label>
+                                        <input type="number" name="quantity" value="1" min="1" 
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                    </div>
+                                    <button type="submit" 
+                                            class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                                        Beli Sekarang
+                                    </button>
                                 </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
-                                    <input type="number" name="quantity" min="1" value="1" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                                </div>
-
-                                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
-                                    Beli Sekarang
-                                </button>
                             </form>
                         </div>
                     </div>
