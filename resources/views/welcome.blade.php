@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Mind Your Power</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    @endpush
 </head>
 <body class="font-sans antialiased">
     <!-- Header -->
@@ -86,100 +89,38 @@
     </section>
 
     <!-- Katalog Section -->
-    <section id="katalog" class="bg-black text-white py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Katalog</h2>
+    <section class="bg-black py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-white text-center mb-12">Katalog</h2>
             
-            <!-- Slider Container -->
-            <div class="relative">
-                <!-- Previous Button -->
-                <button id="prevButton" class="absolute left-0 top-1/2 -translate-y-1/2 bg-black/60 p-4 rounded-full z-10 text-white hover:bg-black/80 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-
-                <!-- Slider -->
-                <div class="overflow-hidden" id="sliderContainer">
-                    <div class="flex transition-transform duration-500 ease-in-out" id="slider">
-                        <!-- Slide 1 -->
-                        <div class="min-w-full md:min-w-[33.333%] p-4">
-                            <div class="bg-white rounded-xl overflow-hidden">
-                                <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Kids II</h3>
-                                    <p class="text-gray-600 mb-4">Quick Dry & Light Fabric</p>
-                                    <a href="{{ route('products.show', 0) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($latestProducts as $product)
+                    <div class="bg-white rounded-lg overflow-hidden">
+                        <!-- Gambar Produk -->
+                        <div class="relative h-80">
+                            @if($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" 
+                                     alt="{{ $product->title }}"
+                                     class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-400">Tidak ada gambar</span>
                                 </div>
-                            </div>
+                            @endif
                         </div>
-
-                        <div class="min-w-full md:min-w-[33.333%] p-4">
-                            <div class="bg-white rounded-xl overflow-hidden">
-                                <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Kids II</h3>
-                                    <p class="text-gray-600 mb-4">Quick Dry & Light Fabric</p>
-                                    <a href="{{ route('products.show', 1) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="min-w-full md:min-w-[33.333%] p-4">
-                            <div class="bg-white rounded-xl overflow-hidden">
-                                <img src="img/catalog 1.png" alt="Product 1" class="w-full h-64 object-cover">
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Kids II</h3>
-                                    <p class="text-gray-600 mb-4">Quick Dry & Light Fabric</p>
-                                    <a href="{{ route('products.show', 2) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 2 -->
-                        <div class="min-w-full md:min-w-[33.333%] p-4">
-                            <div class="bg-white rounded-xl overflow-hidden">
-                                <img src="img/Screenshot 2025-01-05 000542.png" alt="Product 2" class="w-full h-64 object-cover">
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Avanger 90</h3>
-                                    <p class="text-gray-600 mb-4">Avanger Fabric</p>
-                                    <a href="{{ route('products.show', 3) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slide 3 -->
-                        <div class="min-w-full md:min-w-[33.333%] p-4">
-                            <div class="bg-white rounded-xl overflow-hidden">
-                                <img src="img/Screenshot 2025-01-05 000553.png" alt="Product 3" class="w-full h-64 object-cover">
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-black mb-2">Tipe Fighter Pro</h3>
-                                    <p class="text-gray-600 mb-4">Professional Grade Material</p>
-                                    <a href="{{ route('products.show', 4) }}" class="text-blue-600 font-bold hover:underline">Learn More →</a>
-                                </div>
-                            </div>
+                        <!-- Detail Produk -->
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-900">{{ $product->title }}</h3>
+                            <p class="text-gray-600 mt-2">{{ $product->description }}</p>
+                            <p class="text-blue-600 font-bold text-lg mt-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Next Button -->
-                <button id="nextButton" class="absolute right-0 top-1/2 -translate-y-1/2 bg-black/60 p-4 rounded-full z-10 text-white hover:bg-black/80 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
+                @endforeach
             </div>
 
-            <!-- Slider Navigation Dots -->
-            <div class="flex justify-center mt-8 space-x-2" id="sliderDots">
-                <button class="w-3 h-3 rounded-full bg-gray-400 hover:bg-white transition-colors"></button>
-                <button class="w-3 h-3 rounded-full bg-gray-400 hover:bg-white transition-colors"></button>
-                <button class="w-3 h-3 rounded-full bg-gray-400 hover:bg-white transition-colors"></button>
-            </div>
-
-            <!-- View All Button -->
-            <div class="text-center mt-8">
-                <a href="{{ route('products.index') }}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+            <div class="text-center mt-12">
+                <a href="{{ route('products.index') }}" 
+                   class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700">
                     Lihat Semua Katalog
                 </a>
             </div>
@@ -359,5 +300,45 @@
         }
     });
     </script>
+
+    @push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <style>
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            color: white;
+            font-size: 24px;
+        }
+        .swiper-pagination-bullet {
+            background: white;
+        }
+        .swiper-pagination-bullet-active {
+            background: #3b82f6;
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        new Swiper('.productSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+    @endpush
 </body>
 </html>

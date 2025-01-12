@@ -13,19 +13,21 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-        <!-- Tambahkan CSS Swiper -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
         
-        <!-- Tambahkan JS Swiper -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <!-- Additional Styles -->
+        @stack('styles')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>
         </div>
+        
+        <!-- Additional Scripts -->
+        @stack('scripts')
     </body>
 </html>
