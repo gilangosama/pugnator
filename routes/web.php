@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('events', EventManagementController::class);
-    Route::resource('catalog', CatalogManagementController::class);
+    Route::resource('catalog', ProductController::class);
     Route::resource('alumni', AlumniController::class);
     Route::resource('documentation', DocumentationController::class);
 });
