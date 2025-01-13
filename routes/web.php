@@ -56,12 +56,18 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('events', EventManagementController::class);
-    Route::resource('catalog', CatalogManagementController::class);
+    Route::resource('catalog', ProductController::class);
     Route::resource('alumni', AlumniController::class);
     Route::resource('documentation', DocumentationController::class);
 });
 
 Route::patch('/admin/events/{id}/status', [EventManagementController::class, 'updateStatus'])
     ->name('admin.events.updateStatus');
+
+Route::get('/admin/catalog/create', [CatalogManagementController::class, 'create'])->name('admin.catalog.create');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    Route::resource('catalog', CatalogManagementController::class);
+});
 
 require __DIR__.'/auth.php';

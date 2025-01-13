@@ -1,97 +1,108 @@
 <x-app-layout>
     <div class="min-h-screen bg-gray-100">
-        <!-- tambahkan tombol Back -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <a href="{{ route('admin.dashboard') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            Kembali ke Dashboard
-        </a>
-                <h2 class="text-2xl font-bold text-gray-800">Manajemen Katalog</h2>
-                <a href="{{ route('admin.catalog.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                    + Tambah Produk
-                </a>
+        <!-- Header dengan tombol yang sejajar -->
+        <div class="py-6 bg-white shadow">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <a href="{{ route('admin.dashboard') }}" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Kembali ke Dashboard
+                    </a>
+                    <h2 class="text-2xl font-bold text-gray-800">Manajemen Catalog</h2>
+                    <a href="{{ route('admin.catalog.create') }}" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        Tambah Produk
+                    </a>
+                </div>
             </div>
-        </header>
+        </div>
 
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- Filter Kategori -->
-                <div class="mb-6 flex space-x-4">
+        <!-- Filter Kategori -->
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex space-x-4">
                     <a href="{{ route('admin.catalog.index') }}" 
-                       class="px-4 py-2 rounded-lg {{ !request('category') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                       class="px-4 py-2 {{ !request('category') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg">
                         Semua
                     </a>
                     <a href="{{ route('admin.catalog.index', ['category' => 'Seragam']) }}" 
-                       class="px-4 py-2 rounded-lg {{ request('category') === 'Seragam' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                       class="px-4 py-2 {{ request('category') === 'Seragam' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg">
                         Seragam
                     </a>
                     <a href="{{ route('admin.catalog.index', ['category' => 'Aksesoris']) }}" 
-                       class="px-4 py-2 rounded-lg {{ request('category') === 'Aksesoris' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                       class="px-4 py-2 {{ request('category') === 'Aksesoris' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg">
                         Aksesoris
                     </a>
                     <a href="{{ route('admin.catalog.index', ['category' => 'Perlengkapan']) }}" 
-                       class="px-4 py-2 rounded-lg {{ request('category') === 'Perlengkapan' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}">
+                       class="px-4 py-2 {{ request('category') === 'Perlengkapan' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg">
                         Perlengkapan
                     </a>
                 </div>
+            </div>
+        </div>
 
-                <!-- Tabel Katalog -->
+        <!-- Daftar Produk -->
+        <div class="py-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                @if(session('success'))
+                    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produk</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($products as $produk)
-                            <tr>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <img src="{{ asset("storage/$produk->image") }}" alt="{{ $produk['title'] }}" class="h-10 w-10 rounded-full object-cover">
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">{{ $produk['title'] }}</div>
-                                            <div class="text-sm text-gray-500">{{ $produk['description'] }}</div>
+                    <div class="p-6">
+                        @if($products->isEmpty())
+                            <p class="text-center text-gray-500">Belum ada produk yang ditambahkan</p>
+                        @else
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                @foreach($products as $product)
+                                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                                        <div class="aspect-w-16 aspect-h-9">
+                                            @if($product->image)
+                                                <img src="{{ asset('storage/' . $product->image) }}" 
+                                                     alt="{{ $product->title }}" 
+                                                     class="w-full h-48 object-cover"
+                                                     onerror="this.onerror=null; this.src='{{ asset('images/no-image.png') }}';">
+                                            @else
+                                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                                    <span class="text-gray-500">Tidak ada gambar</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="p-4">
+                                            <h3 class="text-lg font-semibold">{{ $product->title }}</h3>
+                                            <p class="text-gray-600 mt-2">{{ $product->description }}</p>
+                                            <p class="text-blue-600 font-bold mt-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                            <div class="mt-4 flex justify-end space-x-2">
+                                                <a href="{{ route('admin.catalog.edit', $product->id) }}" 
+                                                   class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                                                    Edit
+                                                </a>
+                                                <form action="{{ route('admin.catalog.destroy', $product->id) }}" 
+                                                      method="POST" 
+                                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');"
+                                                      class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">{{ $produk['category'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">Rp {{ $produk['price'] }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">{{ $produk['stock'] }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        {{ $produk['status'] }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm font-medium space-x-2">
-                                    <a href="{{ route('admin.catalog.edit', $produk->id) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
-                                    <form action="{{ route('admin.catalog.destroy', $produk->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

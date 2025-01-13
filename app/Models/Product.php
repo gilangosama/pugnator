@@ -12,17 +12,10 @@ class Product extends Model
     protected $fillable = [
         'title',
         'description',
-        'price',
-        'image',
         'category',
+        'price',
         'stock',
+        'image',
         'status'
     ];
-
-    public function penjualan()
-    {
-        return $this->hasMany(Penjualan::class);
-    }
-
-    
 }

@@ -12,61 +12,95 @@
 <body class="font-sans antialiased">
     <!-- Header -->
     <header class="bg-gray-800 text-white">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            
-            <h1 class="text-2xl font-bold flex items-center"><img src="img/logo putih.png" alt="logo" class="w-10 h-10 mr-2">Pugnator</h1>
-            
-            <!-- Desktop Navigation -->
-            <nav class="hidden md:flex items-center space-x-6">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <h1 class="text-2xl font-bold flex items-center">
+                    <img src="img/logo putih.png" alt="logo" class="w-10 h-10 mr-2">Pugnator
+                </h1>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <?php
+                    $menu_items = [
+                        "Home" => "home", 
+                        "Katalog" => "katalog", 
+                        "About-Us" => "about-us", 
+                        "Event" => "events",
+                        "Contact" => "contact"
+                    ];
+                    foreach ($menu_items as $item => $id) {
+                        if ($item == "Event") {
+                            echo "<a href='" . route('events.index') . "' class='hover:text-gray-300 transition-colors'>$item</a>";
+                        } else {
+                            echo "<a href='#$id' class='hover:text-gray-300 transition-colors'>$item</a>";
+                        }
+                    }
+                    ?>
+                    @if (Route::has('login'))
+                        @auth
+                            <div class="relative">
+                                <button id="profileDropdownButton" 
+                                    class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                                    <span>{{ Auth::user()->first_name }}</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                
+                                <div id="profileDropdownMenu" 
+                                    class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">Profile</a>
+                                    <hr class="my-1">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-50">Logout</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors">Login</a>
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="ml-4 text-white hover:text-gray-300 transition-colors">Register</a>
+                            @endif
+                        @endauth
+                    @endif
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button id="mobileMenuButton" class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4">
                 <?php
-                $menu_items = [
-                    "Home" => "home", 
-                    "Katalog" => "katalog", 
-                    "About-Us" => "about-us", 
-                    "Event" => "events",
-                    "Contact" => "contact"
-                ];
                 foreach ($menu_items as $item => $id) {
                     if ($item == "Event") {
-                        echo "<a href='" . route('events.index') . "' class='hover:text-gray-300 transition-colors'>$item</a>";
+                        echo "<a href='" . route('events.index') . "' class='block py-2 hover:text-gray-300 transition-colors'>$item</a>";
                     } else {
-                        echo "<a href='#$id' class='hover:text-gray-300 transition-colors'>$item</a>";
+                        echo "<a href='#$id' class='block py-2 hover:text-gray-300 transition-colors'>$item</a>";
                     }
                 }
                 ?>
                 @if (Route::has('login'))
                     @auth
-                        <div class="relative">
-                            <button id="profileDropdownButton" 
-                                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
-                                <span>{{ Auth::user()->first_name }}</span>
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            
-                            <div id="profileDropdownMenu" 
-                                class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">
-                                    Profile
-                                </a>
-                                <hr class="my-1">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-50">
-                                        Logout
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                        <a href="{{ route('profile.edit') }}" class="block py-2 hover:text-gray-300 transition-colors">Profile</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left py-2 hover:text-gray-300 transition-colors">Logout</button>
+                        </form>
                     @else
-                        <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors">Login</a>
+                        <a href="{{ route('login') }}" class="block py-2 hover:text-gray-300 transition-colors">Login</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-white hover:text-gray-300 transition-colors">Register</a>
+                            <a href="{{ route('register') }}" class="block py-2 hover:text-gray-300 transition-colors">Register</a>
                         @endif
                     @endauth
                 @endif
-            </nav>
+            </div>
         </div>
     </header>
     
@@ -343,22 +377,30 @@
     </footer>
 
     <script>
-    // Ambil elemen yang diperlukan
+    // Toggle mobile menu
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Profile dropdown (existing code)
     const profileButton = document.getElementById('profileDropdownButton');
     const profileMenu = document.getElementById('profileDropdownMenu');
 
-    // Toggle dropdown saat tombol diklik
-    profileButton.addEventListener('click', function(e) {
-        e.stopPropagation();
-        profileMenu.classList.toggle('hidden');
-    });
+    if (profileButton && profileMenu) {
+        profileButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileMenu.classList.toggle('hidden');
+        });
 
-    // Tutup dropdown saat mengklik di luar
-    document.addEventListener('click', function(e) {
-        if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
-            profileMenu.classList.add('hidden');
-        }
-    });
+        document.addEventListener('click', function(e) {
+            if (!profileButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+    }
     </script>
 
     @push('styles')
