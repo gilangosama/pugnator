@@ -18,4 +18,11 @@ class Product extends Model
         'image',
         'status'
     ];
+
+    public function penjualan()
+    {
+        return $this->hasMany(Penjualan::class);
+    }
+
+    
 }

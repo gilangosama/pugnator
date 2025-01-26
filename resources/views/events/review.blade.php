@@ -23,7 +23,7 @@
                             <p class="text-gray-600">{{ $event['date'] }}</p>
                         </div>
 
-                        <form action="{{ route('events.review.store', $event['id']) }}" method="POST" class="space-y-6">
+                        <form action="{{ route('events.review.store', $event->id) }}" method="POST" class="space-y-6">
                             @csrf
                             
                             <div>

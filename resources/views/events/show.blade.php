@@ -67,5 +67,54 @@
                 </div>
             </div>
         </div>
+
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="p-8">
+                    <h2 class="text-2xl font-bold mb-6">Ulasan Event</h2>
+                    
+                    @if($event->reviews->count() > 0)
+                        <div class="space-y-6">
+                            @foreach($event->reviews as $review)
+                                <div class="border-b border-gray-200 pb-6">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                                <span class="text-gray-600 font-medium">
+                                                    {{ substr($review->user->first_name ?? '', 0, 1) }}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-gray-900">
+                                                    {{ $review->user->first_name ?? '' }} {{ $review->user->last_name ?? '' }}
+                                                </div>
+                                                <div class="text-sm text-gray-500">
+                                                    {{ $review->created_at->diffForHumans() }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex text-yellow-400">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= $review->rating)
+                                                    ⭐
+                                                @else
+                                                    ☆
+                                                @endif
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-700 mb-2">{{ $review->review }}</p>
+                                    @if($review->suggestion)
+                                        <p class="text-gray-600 text-sm italic">"{{ $review->suggestion }}"</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-gray-500 text-center py-4">Belum ada ulasan untuk event ini</p>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout> 

@@ -10,11 +10,11 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
+        'event_id',
+        'user_id',
         'rating',
         'review',
-        'suggestion',
-        'event_id',
-        'user_id'
+        'suggestion'
     ];
 
     public function event()
@@ -24,6 +24,6 @@ class Review extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
 }

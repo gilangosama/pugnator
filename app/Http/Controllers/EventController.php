@@ -21,12 +21,7 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = Event::find($id);
-        
-        if (!$event) {
-            abort(404);
-        }
-        
+        $event = Event::with(['reviews.user'])->findOrFail($id);
         return view('events.show', compact('event'));
     }
 
@@ -98,19 +93,18 @@ class EventController extends Controller
         ]);
 
         $event = Event::find($id);
-
         
         if (!$event) {
             abort(404);
         }
 
-        // Logic untuk menyimpan review
+        // Pastikan user_id diisi dengan id user yang sedang login
         Review::create([
             'rating' => $validated['rating'],
             'review' => $validated['review'],
             'suggestion' => $validated['suggestion'],
             'event_id' => $event->id,
-            'user_id' => auth()->id()
+            'user_id' => auth()->id() // Pastikan ini terisi
         ]);
 
         return redirect()->route('events.show', $id)

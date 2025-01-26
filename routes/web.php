@@ -66,8 +66,8 @@ Route::patch('/admin/events/{id}/status', [EventManagementController::class, 'up
 
 Route::get('/admin/catalog/create', [CatalogManagementController::class, 'create'])->name('admin.catalog.create');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::resource('catalog', CatalogManagementController::class);
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('admin/catalog', CatalogManagementController::class, ['as' => 'admin']);
 });
 
 require __DIR__.'/auth.php';

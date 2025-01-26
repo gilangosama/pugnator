@@ -34,4 +34,9 @@ class Event extends Model
     {
         return $this->hasMany(Booking::class, 'event_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->orderBy('created_at', 'desc');
+    }
 }

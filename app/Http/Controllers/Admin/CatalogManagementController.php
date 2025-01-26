@@ -3,24 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CatalogManagementController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $category = $request->query('category');
-        
-        $query = Product::query();
-        
-        if ($category && $category !== 'Semua') {
-            $query->where('category', $category);
-        }
-        
-        $products = $query->get();
-        
+        $products = Product::all();
         return view('admin.catalog.index', compact('products'));
     }
 
@@ -43,9 +34,7 @@ class CatalogManagementController extends Controller
         try {
             // Handle image upload
             if ($request->hasFile('image')) {
-                // Simpan gambar dengan nama asli
-                $imageName = $request->file('image')->getClientOriginalName();
-                $imagePath = $request->file('image')->storeAs('products', $imageName, 'public');
+                $imagePath = $request->file('image')->store('products', 'public');
             }
 
             Product::create([
@@ -61,53 +50,53 @@ class CatalogManagementController extends Controller
             return redirect()->route('admin.catalog.index')
                 ->with('success', 'Produk berhasil ditambahkan');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error: ' . $e->getMessage());
+            return back()
+                ->withInput()
+                ->with('error', 'Error: ' . $e->getMessage());
         }
     }
 
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.catalog.create', compact('product'));
+        return view('admin.catalog.edit', compact('product'));
     }
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'required|string|max:255',
-            'category' => 'required|string|max:50',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-        ]);
-
         $product = Product::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::delete('public/' . $product->image);
-            }
-            $imagePath = $request->file('image')->store('products', 'public');
-            $product->image = $imagePath;
-        }
-
-        if ($request->stock == 0) {
-            $status = 'Habis';
-        } else {
-            $status = 'Tersedia';
-        }
-
-        $product->update([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'category' => $validated['category'],
-            'price' => $validated['price'],
-            'stock' => $validated['stock'],
-            'status' => $status
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category' => 'required|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        return redirect()->route('admin.catalog.index')->with('success', 'Produk berhasil diperbarui');
+        try {
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $imagePath = $request->file('image')->store('products', 'public');
+                $validated['image'] = $imagePath;
+            }
+
+            $product->update($validated);
+            $product->status = $request->stock > 0 ? 'Tersedia' : 'Habis';
+            $product->save();
+
+            return redirect()->route('admin.catalog.index')
+                ->with('success', 'Produk berhasil diperbarui');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Error: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id)
@@ -115,24 +104,17 @@ class CatalogManagementController extends Controller
         try {
             $product = Product::findOrFail($id);
             
-            // Hapus gambar dari storage jika ada
+            // Delete image if exists
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
             
-            // Hapus data produk
             $product->delete();
             
-            return redirect()
-                ->route('admin.catalog.index')
+            return redirect()->route('admin.catalog.index')
                 ->with('success', 'Produk berhasil dihapus');
-                
         } catch (\Exception $e) {
-            return redirect()
-                ->route('admin.catalog.index')
-                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
+            return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-
-
 }
